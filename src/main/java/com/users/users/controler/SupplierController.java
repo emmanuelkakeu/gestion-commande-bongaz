@@ -1,70 +1,60 @@
 package com.users.users.controler;
 
-import com.users.users.dto.SupplierDTO;
-import com.users.users.models.Supplier;
-import com.users.users.services.SupplierService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.users.users.controler.api.SupplierApi;
+import com.users.users.dto.SupplierDto;
+import com.users.users.services.interfaces.SupplierService;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@Tag(name = "Supplier Management", description = "Endpoint to manage suppliers")
 @RestController
-@RequestMapping("/api/suppliers")
-public class SupplierController {
+public class SupplierController implements SupplierApi {
+
+    private final SupplierService supplierService;
+    private final ObjectMapper objectMapper; // Ajoutez l'objet ObjectMapper
 
     @Autowired
-    private SupplierService supplierService;
+    public SupplierController(SupplierService supplierService, ObjectMapper objectMapper) {
+        this.supplierService = supplierService;
+        this.objectMapper = objectMapper; // Injectez l'objet ObjectMapper
+        // Configurez le module JavaTimeModule pour prendre en charge les types de date/heure Java 8
 
-    @Operation(summary = "Add a new supplier")
-    @PostMapping(consumes = "multipart/form-data")
-//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Supplier> addSupplier(
-            @RequestPart("supplierDTO") SupplierDTO supplierDTO,
-            @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
-
-        Supplier createdSupplier = supplierService.addSupplier(supplierDTO, imageFile);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdSupplier);
     }
 
-    @Operation(summary = "Update an existing supplier")
-    @PutMapping("/{id}")
-    public ResponseEntity<SupplierDTO> updateSupplier(
-            @Parameter(description = "Supplier ID") @PathVariable Long id,
-            @Parameter(description = "Supplier details") @RequestBody SupplierDTO supplierDTO,
-            @Parameter(description = "Image file") @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        SupplierDTO updatedSupplier = supplierService.updateSupplier(id, supplierDTO, imageFile);
-        return ResponseEntity.ok(updatedSupplier);
+    @Override
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public SupplierDto save(@RequestPart("supplierDTO") String supplierJson,
+                            @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
+        // Convertir la chaîne JSON en objet SupplierDto en utilisant l'ObjectMapper configuré
+        SupplierDto supplierDto = objectMapper.readValue(supplierJson, SupplierDto.class);
+
+//        // Vérifiez les valeurs des paramètres reçus depuis la requête
+//        System.out.println("Supplier DTO: " + supplierDto);
+//        System.out.println("Image File Name: " + imageFile.getOriginalFilename());
+
+        // Appelez le service pour enregistrer le fournisseur avec l'image
+        return supplierService.save(supplierDto, imageFile);
     }
 
-    @Operation(summary = "Get a supplier by ID")
-    @GetMapping("/{id}")
-    public ResponseEntity<SupplierDTO> getSupplierById(
-            @Parameter(description = "Supplier ID") @PathVariable Long id) {
-        SupplierDTO supplierDTO = supplierService.getSupplierById(id);
-        return ResponseEntity.ok(supplierDTO);
+    @Override
+    public SupplierDto findById(Integer id) {
+        return supplierService.findById(id);
     }
 
-    @Operation(summary = "Get all suppliers")
-    @GetMapping
-    public ResponseEntity<List<SupplierDTO>> getAllSuppliers() {
-        List<SupplierDTO> suppliers = supplierService.getAllSuppliers();
-        return ResponseEntity.ok(suppliers);
+    @Override
+    public List<SupplierDto> findAll() {
+        return supplierService.findAll();
     }
 
-    @Operation(summary = "Delete a supplier")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSupplier(
-            @Parameter(description = "Supplier ID") @PathVariable Long id) {
-        supplierService.deleteSupplier(id);
-        return ResponseEntity.noContent().build();
+    @Override
+    public void delete(Integer id) {
+        supplierService.delete(id);
     }
 }

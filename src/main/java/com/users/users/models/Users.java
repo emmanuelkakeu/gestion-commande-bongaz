@@ -21,6 +21,8 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Users extends AbstractEntity{
 
+
+
     @Column(name = "firstName")
     private String firstName;
 
@@ -52,7 +54,6 @@ public class Users extends AbstractEntity{
     private String imageFileName;
 
     @OneToMany
-    @JsonIgnore
     private List<Role> roles;
 
 

@@ -1,74 +1,86 @@
 package com.users.users.services;
 
-import com.users.users.dto.SupplierDTO;
-import com.users.users.models.Supplier;
+
+import com.users.users.dto.SupplierDto;
+import com.users.users.exception.EntityNotFoundException;
+import com.users.users.exception.ErrorCodes;
+import com.users.users.exception.InvalidEntityException;
 import com.users.users.repository.SupplierRepository;
-import org.springframework.beans.BeanUtils;
+import com.users.users.services.interfaces.SupplierService;
+import com.users.users.validators.SupplierValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class SupplierServiceImpl implements SupplierService {
 
-    @Autowired
-    private SupplierRepository supplierRepository;
+    private final SupplierRepository supplierRepository;
+    private final FileService fileService;
+   @Autowired
+    public SupplierServiceImpl(SupplierRepository supplierRepository, FileService fileService) {
+        this.supplierRepository = supplierRepository;
+        this.fileService = fileService;
+    }
 
-    @Autowired
-    private FileService fileService;
 
     @Override
-    public Supplier addSupplier(SupplierDTO supplierDTO, MultipartFile imageFile) throws IOException {
-        Supplier supplier = new Supplier();
-        BeanUtils.copyProperties(supplierDTO, supplier);
-        String url = "http://localhost:8082/api/images/vue/";
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imageName =  fileService.saveImage(imageFile);
-            supplier.setImageFileName(imageName);
-            // Update the DTO with the image name
+    public SupplierDto save(SupplierDto dto, MultipartFile imageFile) throws IOException {
+
+        if (imageFile.isEmpty()) {
+            ResponseEntity.badRequest().body("Veuillez sélectionner une image.");
         }
-        supplier.setDateCreated(new Date());
-        supplierRepository.save(supplier);
-        return supplier;
-    }
-
-    @Override
-    public SupplierDTO updateSupplier(Long id, SupplierDTO supplierDTO, MultipartFile imageFile) throws IOException {
-        Supplier supplier = supplierRepository.findById(id).orElseThrow(() -> new RuntimeException("Supplier not found"));
-        BeanUtils.copyProperties(supplierDTO, supplier);
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imageName = fileService.saveImage(imageFile);
-            supplier.setImageFileName(imageName);
+        String imageFileName = fileService.saveImage(imageFile);
+        dto.setImageFileName(imageFileName);
+        List<String> errors = SupplierValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("Fournisseur is not valid {}", dto);
+            throw new InvalidEntityException("Le fournisseur n'est pas valide", ErrorCodes.FOURNISSEUR_NOT_VALID, errors);
         }
-        supplierRepository.save(supplier);
-        return supplierDTO;
+
+        return SupplierDto.fromEntity(
+                supplierRepository.save(
+                        SupplierDto.toEntity(dto)
+                )
+        );
     }
 
     @Override
-    public SupplierDTO getSupplierById(Long id) {
-        Supplier supplier = supplierRepository.findById(id).orElseThrow(() -> new RuntimeException("Supplier not found"));
-        SupplierDTO supplierDTO = new SupplierDTO();
-        BeanUtils.copyProperties(supplier, supplierDTO);
-        return supplierDTO;
+    public SupplierDto findById(Integer id) {
+        if (id == null) {
+            log.error("Fournisseur ID is null");
+            return null;
+        }
+        return supplierRepository.findById(id)
+                .map(SupplierDto::fromEntity)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Aucun fournisseur avec l'ID = " + id + " n' ete trouve dans la BDD",
+                        ErrorCodes.FOURNISSEUR_NOT_FOUND)
+                );
     }
 
     @Override
-    public List<SupplierDTO> getAllSuppliers() {
-        List<Supplier> suppliers = supplierRepository.findAll();
-        return suppliers.stream().map(supplier -> {
-            SupplierDTO supplierDTO = new SupplierDTO();
-            BeanUtils.copyProperties(supplier, supplierDTO);
-            return supplierDTO;
-        }).collect(Collectors.toList());
+    public List<SupplierDto> findAll() {
+        return supplierRepository.findAll().stream()
+                .map(SupplierDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteSupplier(Long id) {
+    public void delete(Integer id) {
+        if (id == null) {
+            log.error("Fournisseur ID is null");
+            return;
+        }
+
         supplierRepository.deleteById(id);
     }
+
 }
