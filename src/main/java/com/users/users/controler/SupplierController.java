@@ -34,13 +34,7 @@ public class SupplierController implements SupplierApi {
                             @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
         // Convertir la chaîne JSON en objet SupplierDto en utilisant l'ObjectMapper configuré
         SupplierDto supplierDto = objectMapper.readValue(supplierJson, SupplierDto.class);
-
-//        // Vérifiez les valeurs des paramètres reçus depuis la requête
-//        System.out.println("Supplier DTO: " + supplierDto);
-//        System.out.println("Image File Name: " + imageFile.getOriginalFilename());
-
-        // Appelez le service pour enregistrer le fournisseur avec l'image
-        return supplierService.save(supplierDto, imageFile);
+     return supplierService.save(supplierDto, imageFile);
     }
 
     @Override
