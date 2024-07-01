@@ -4,7 +4,6 @@ import gestion.commandeProduit.DTO.*;
 import gestion.commandeProduit.entities.Article;
 import gestion.commandeProduit.entities.CommandeSupplier;
 import gestion.commandeProduit.entities.LigneCommandeSupplier;
-import gestion.commandeProduit.entities.Supplier;
 import gestion.commandeProduit.entities.enums.EtatCommande;
 import gestion.commandeProduit.entities.enums.SourceMvtStk;
 import gestion.commandeProduit.entities.enums.TypeMvtStk;
@@ -15,7 +14,6 @@ import gestion.commandeProduit.exception.InvalidOperationException;
 import gestion.commandeProduit.repository.ArticleRepository;
 import gestion.commandeProduit.repository.CommandeSupplierRepository;
 import gestion.commandeProduit.repository.LigneCommandeSupplierRepository;
-import gestion.commandeProduit.repository.SupplierRepository;
 import gestion.commandeProduit.service.CommandeSupplierService;
 import gestion.commandeProduit.service.MvtStkService;
 import gestion.commandeProduit.validator.ArticleValidator;
@@ -37,7 +35,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CommandeSupplierServiceImpl implements CommandeSupplierService {
 
-    private final SupplierRepository supplierRepository;
+
     private final ArticleRepository articleRepository;
     private final CommandeSupplierRepository commandeSupplierRepository;
     private final LigneCommandeSupplierRepository lignecommandeSupplierRepository;
@@ -45,8 +43,8 @@ public class CommandeSupplierServiceImpl implements CommandeSupplierService {
 @Autowired
 private final MvtStkService mvtStkService;
 
-    public CommandeSupplierServiceImpl(SupplierRepository supplierRepository, ArticleRepository articleRepository, CommandeSupplierRepository commandeSupplierRepository, LigneCommandeSupplierRepository lignecommandeSupplierRepository, MvtStkService mvtStkService) {
-        this.supplierRepository = supplierRepository;
+    public CommandeSupplierServiceImpl( ArticleRepository articleRepository, CommandeSupplierRepository commandeSupplierRepository, LigneCommandeSupplierRepository lignecommandeSupplierRepository, MvtStkService mvtStkService) {
+
         this.articleRepository = articleRepository;
         this.commandeSupplierRepository = commandeSupplierRepository;
         this.lignecommandeSupplierRepository = lignecommandeSupplierRepository;
@@ -57,23 +55,18 @@ private final MvtStkService mvtStkService;
     @Override
     public CommandeSupplierDto save(CommandeSupplierDto dto) {
 
-        List<String> errors = CommandeSupplierValidator.validate(dto);
-
-        if (!errors.isEmpty()) {
-            log.error("Commande fournisseur n'est pas valide");
-            throw new InvalidEntityException("La commande fournisseur n'est pas valide", ErrorCodes.COMMANDE_FOURNISSEUR_NOT_VALID, errors);
-        }
+//        List<String> errors = CommandeSupplierValidator.validate(dto);
+//
+//        if (!errors.isEmpty()) {
+//            log.error("Commande fournisseur n'est pas valide");
+//            throw new InvalidEntityException("La commande fournisseur n'est pas valide", ErrorCodes.COMMANDE_FOURNISSEUR_NOT_VALID, errors);
+//        }
 
         if (dto.getId() != null && dto.isCommandeLivree()) {
             throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_FOURNISSEUR_NON_MODIFIABLE);
         }
 
-        Optional<Supplier> supplier = supplierRepository.findById(dto.getSupplier().getId());
-        if (supplier.isEmpty()) {
-            log.warn("Fournisseur with ID {} was not found in the DB", dto.getSupplier().getId());
-            throw new EntityNotFoundException("Aucun fournisseur avec l'ID" + dto.getSupplier().getId() + " n'a ete trouve dans la BDD",
-                    ErrorCodes.FOURNISSEUR_NOT_FOUND);
-        }
+
 
         List<String> articleErrors = new ArrayList<>();
 
@@ -81,15 +74,22 @@ private final MvtStkService mvtStkService;
             dto.getLigneCommandeSupplier().forEach(ligCmdFrs -> {
                 if (ligCmdFrs.getArticle() != null) {
                     Optional<Article> article = articleRepository.findById(ligCmdFrs.getArticle().getId());
+
                     if (article.isEmpty()) {
                         articleErrors.add("L'article avec l'ID " + ligCmdFrs.getArticle().getId() + " n'existe pas");
+
+                    } else {
+                        Article articleEntity = article.get();
+                        BigDecimal newStock = articleEntity.getStockInit().add(ligCmdFrs.getQuantite());
+                        articleEntity.setStockInit(newStock);
+                        articleRepository.save(articleEntity);
+
                     }
                 } else {
-                    articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
+                    articleErrors.add("Impossible d'enregistrer une commande avec un article NULL");
                 }
             });
         }
-
         if (!articleErrors.isEmpty()) {
             log.warn("");
             throw new InvalidEntityException("Article n'existe pas dans la BDD", ErrorCodes.ARTICLE_NOT_FOUND, articleErrors);
@@ -159,12 +159,6 @@ private final MvtStkService mvtStkService;
                     ErrorCodes.COMMANDE_FOURNISSEUR_NON_MODIFIABLE);
         }
         CommandeSupplierDto commandeSupplierDto = checkEtatCommande(idCommande);
-        Optional<Supplier> supplierOptional = supplierRepository.findById(idFournisseur);
-        if (supplierOptional.isEmpty()) {
-            throw new EntityNotFoundException(
-                    "Aucun fournisseur n'a ete trouve avec l'ID " + idFournisseur, ErrorCodes.FOURNISSEUR_NOT_FOUND);
-        }
-        commandeSupplierDto.setSupplier(SupplierDto.fromEntity(supplierOptional.get()));
 
         return CommandeSupplierDto.fromEntity(
                 commandeSupplierRepository.save(CommandeSupplierDto.toEntity(commandeSupplierDto))
@@ -268,11 +262,11 @@ private final MvtStkService mvtStkService;
             log.error("Commande fournisseur ID is NULL");
             return;
         }
-        List<LigneCommandeSupplier> ligneCommandeFournisseurs = lignecommandeSupplierRepository.findAllByCommandeSupplierId(id);
-        if (!ligneCommandeFournisseurs.isEmpty()) {
-            throw new InvalidOperationException("Impossible de supprimer une commande fournisseur deja utilisee",
-                    ErrorCodes.COMMANDE_FOURNISSEUR_ALREADY_IN_USE);
-        }
+//        List<LigneCommandeSupplier> ligneCommandeFournisseurs = lignecommandeSupplierRepository.findAllByCommandeSupplierId(id);
+//        if (!ligneCommandeFournisseurs.isEmpty()) {
+//            throw new InvalidOperationException("Impossible de supprimer une commande fournisseur deja utilisee",
+//                    ErrorCodes.COMMANDE_FOURNISSEUR_ALREADY_IN_USE);
+//        }
         commandeSupplierRepository.deleteById(id);
 
     }
@@ -331,7 +325,6 @@ private final MvtStkService mvtStkService;
                 .typeMvt(TypeMvtStk.ENTREE)
                 .sourceMvt(SourceMvtStk.COMMANDE_SUPPLIER)
                 .quantite(lig.getQuantite())
-//                .idEntreprise(lig.getIdEntreprise())
                 .build();
         mvtStkService.entreeStock(mvtStkDto);
     }

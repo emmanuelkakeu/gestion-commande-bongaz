@@ -3,6 +3,7 @@ package gestion.commandeProduit.DTO;
 import gestion.commandeProduit.entities.CommandeCompanies;
 import gestion.commandeProduit.entities.LigneCommandeCompanies;
 import gestion.commandeProduit.entities.enums.EtatCommande;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,9 +22,12 @@ public class CommandeCompaniesDto {
 
     private EtatCommande etatCommande;
 
-    private CompaniesDto companiesDto;
+    private int idCompaniesDto;
 
     private List<LigneCommandeCompaniesDto> ligneCommandeCompaniesDto;
+
+
+    private String prixTolalCmmd;
 
     public  static CommandeCompaniesDto fromEntities(CommandeCompanies commandeCompanies){
 
@@ -36,7 +40,8 @@ public class CommandeCompaniesDto {
                 .code(commandeCompanies.getCode())
                 .dateCommande(commandeCompanies.getDateCommande())
                 .etatCommande(commandeCompanies.getEtatCommande())
-                .companiesDto(CompaniesDto.fromEntity(commandeCompanies.getCompanies()))
+                .idCompaniesDto(commandeCompanies.getIdCompanies())
+                .prixTolalCmmd(commandeCompanies.getPrixTolalCmmd())
                 .build();
     }
 
@@ -52,7 +57,8 @@ public class CommandeCompaniesDto {
         commandeCompanies.setCode(dto.getCode());
         commandeCompanies.setDateCommande(dto.getDateCommande());
         commandeCompanies.setEtatCommande(dto.getEtatCommande());
-        commandeCompanies.setCompanies(CompaniesDto.toEntity(dto.getCompaniesDto()));
+        commandeCompanies.setIdCompanies(dto.getIdCompaniesDto());
+        commandeCompanies.setPrixTolalCmmd(dto.getPrixTolalCmmd());
 
         return commandeCompanies;
     }

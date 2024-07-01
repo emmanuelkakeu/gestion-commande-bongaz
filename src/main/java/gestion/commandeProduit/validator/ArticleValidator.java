@@ -16,13 +16,16 @@ public class ArticleValidator {
             errors.add("Veuillez renseigner la designation de l'article");
             errors.add("Veuillez renseigner le prix unitaire HT l'article");
             errors.add("Veuillez renseigner le taux TVA de l'article");
-            errors.add("Veuillez renseigner le prix unitaire TTC de l'article");
+
 
             return errors;
         }
 
         if (!StringUtils.hasLength(dto.getCodeArticle())) {
             errors.add("Veuillez renseigner le code de l'article");
+        }
+        if (!StringUtils.hasLength(dto.getNameArticle())) {
+            errors.add("Veuillez renseigner le nom de l'article");
         }
         if (!StringUtils.hasLength(dto.getDesignation())) {
             errors.add("Veuillez renseigner la designation de l'article");
@@ -33,9 +36,7 @@ public class ArticleValidator {
         if (dto.getTauxTva() == null) {
             errors.add("Veuillez renseigner le taux TVA de l'article");
         }
-        if (dto.getPrixUnitaireTtc() == null) {
-            errors.add("Veuillez renseigner le prix unitaire TTC de l'article");
-        }
+
 
         return errors;
     }

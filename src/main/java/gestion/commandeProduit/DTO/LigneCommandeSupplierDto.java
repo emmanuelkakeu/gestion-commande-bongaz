@@ -15,12 +15,14 @@ public class LigneCommandeSupplierDto {
     private Integer id;
 
     private ArticleDto article;
-    @JsonIgnore
-    private CommandeSupplier commandeSupplier;
 
     private BigDecimal quantite;
 
-    private BigDecimal prixUnitaire;
+    private BigDecimal prixTotalLgn;
+
+    @JsonIgnore
+    private CommandeSupplier commandeSupplier;
+
 
 
 
@@ -32,7 +34,7 @@ public class LigneCommandeSupplierDto {
                 .id(ligneCommandeSupplier.getId())
                 .article(ArticleDto.fromEntity(ligneCommandeSupplier.getArticle()))
                 .quantite(ligneCommandeSupplier.getQuantite())
-                .prixUnitaire(ligneCommandeSupplier.getPrixUnitaire())
+                .prixTotalLgn(ligneCommandeSupplier.getPrixTotalLgn())
                 .build();
     }
 
@@ -44,7 +46,7 @@ public class LigneCommandeSupplierDto {
         LigneCommandeSupplier ligneCommandeSupplier = new LigneCommandeSupplier();
         ligneCommandeSupplier.setId(dto.getId());
         ligneCommandeSupplier.setArticle(ArticleDto.toEntity(dto.getArticle()));
-        ligneCommandeSupplier.setPrixUnitaire(dto.getPrixUnitaire());
+        ligneCommandeSupplier.setPrixTotalLgn(dto.getPrixTotalLgn());
         ligneCommandeSupplier.setQuantite(dto.getQuantite());
         return ligneCommandeSupplier;
     }

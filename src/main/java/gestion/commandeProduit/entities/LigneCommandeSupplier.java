@@ -28,10 +28,8 @@ public class LigneCommandeSupplier extends AbstractEntity {
     @Column(name = "quantite")
     private BigDecimal quantite;
 
-    @Column(name = "prixunitaire")
-    private BigDecimal prixUnitaire;
+    @Column(name = "prixTotalLgn")
+    private BigDecimal prixTotalLgn;
 
-    @Column(name = "identreprise")
-    private Integer idEntreprise;
 
 }

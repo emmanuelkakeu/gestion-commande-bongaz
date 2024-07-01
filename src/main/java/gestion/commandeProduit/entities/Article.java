@@ -19,6 +19,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "article")
 public class Article extends AbstractEntity {
 
+    @Column(name = "nameArticle")
+    private String nameArticle;
+
     @Column(name = "codearticle")
     private String codeArticle;
 
@@ -34,8 +37,18 @@ public class Article extends AbstractEntity {
     @Column(name = "prixunitairettc")
     private BigDecimal prixUnitaireTtc;
 
-    @Column(name = "imageFileName")
+    @Column(name = "stock")
+    private BigDecimal stockInit;
+
+    @Column(name = "image_file_name")
     private String imageFileName;
+
+    @Column(name = "supplier_id", nullable = true)
+    private Integer supplierId;
+
+    @Column(name = "gas_retailer_id", nullable = true)
+    private Integer gasRetailerId;
+
 
 
     @OneToMany(mappedBy = "article")

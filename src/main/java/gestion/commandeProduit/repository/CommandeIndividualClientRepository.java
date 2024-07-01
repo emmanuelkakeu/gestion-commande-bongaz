@@ -14,7 +14,6 @@ public interface CommandeIndividualClientRepository extends JpaRepository<Comman
 
    
 
-    List<CommandeIndividualClient> findAllByIndividualClientId(Integer id);
 
 
 }

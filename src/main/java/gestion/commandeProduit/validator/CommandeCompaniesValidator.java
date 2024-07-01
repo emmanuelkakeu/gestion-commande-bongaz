@@ -28,9 +28,7 @@ public class CommandeCompaniesValidator {
         if (!StringUtils.hasLength(dto.getEtatCommande().toString())) {
             errors.add("Veuillez renseigner l'etat de la commande");
         }
-        if (dto.getCompaniesDto() == null || dto.getCompaniesDto().getId() == null) {
-            errors.add("Veuillez renseigner l'entreprise cliente ");
-        }
+
 
         return errors;
     }

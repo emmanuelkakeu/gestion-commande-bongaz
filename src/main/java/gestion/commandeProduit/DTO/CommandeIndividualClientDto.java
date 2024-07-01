@@ -1,15 +1,11 @@
 package gestion.commandeProduit.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import gestion.commandeProduit.entities.CommandeIndividualClient;
-import gestion.commandeProduit.entities.IndividualClient;
 import gestion.commandeProduit.entities.enums.EtatCommande;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,10 +21,12 @@ public class CommandeIndividualClientDto {
 
     private EtatCommande etatCommande;
 
-    private IndividualClientDto individualClient;
-
+    private int idIndividualClient;
 
     private List<LigneCommandeIndividualClientDto> ligneCommandeClients;
+
+    private String prixTolalCmmd;
+
 
     public static CommandeIndividualClientDto fromEntity(CommandeIndividualClient commandeIndividualClient) {
         if (commandeIndividualClient == null) {
@@ -39,7 +37,8 @@ public class CommandeIndividualClientDto {
                 .code(commandeIndividualClient.getCode())
                 .dateCommande(commandeIndividualClient.getDateCommande())
                 .etatCommande(commandeIndividualClient.getEtatCommande())
-                .individualClient(IndividualClientDto.fromEntity(commandeIndividualClient.getIndividualClient()))
+                .idIndividualClient(commandeIndividualClient.getIdIndividualClient())
+                .prixTolalCmmd(commandeIndividualClient.getPrixTolalCmmd())
                 .build();
 
     }
@@ -51,9 +50,10 @@ public class CommandeIndividualClientDto {
         CommandeIndividualClient commandeClient = new CommandeIndividualClient();
         commandeClient.setId(dto.getId());
         commandeClient.setCode(dto.getCode());
-        commandeClient.setIndividualClient(IndividualClientDto.toEntity(dto.getIndividualClient()));
+        commandeClient.setIdIndividualClient(dto.getIdIndividualClient());
         commandeClient.setDateCommande(dto.getDateCommande());
         commandeClient.setEtatCommande(dto.getEtatCommande());
+        commandeClient.setPrixTolalCmmd(dto.getPrixTolalCmmd());
 
         return commandeClient;
     }

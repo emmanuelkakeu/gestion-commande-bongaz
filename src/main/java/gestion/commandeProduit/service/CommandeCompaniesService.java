@@ -31,13 +31,15 @@ public interface CommandeCompaniesService {
 
     CommandeCompaniesDto findByCode(String code);
 
+    List<CommandeCompaniesDto> getCommandesByEtat(EtatCommande etatCommande);
+
     List<CommandeCompaniesDto> findAll();
 
     List<LigneCommandeCompaniesDto> findAllLignesCommandesCompaniesByCommandeCompaniesId(Integer idCommande);
 
     List<LigneCommandeCompaniesDto> findHistoriqueCommandeCompanies(Integer idArticle);
 
-    void delete(Integer id);
+    void delete(Integer idCommandeCompany);
 
 
 }

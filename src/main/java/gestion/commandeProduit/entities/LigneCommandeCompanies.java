@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "ligneCommandeCompanies")
 public class LigneCommandeCompanies extends AbstractEntity{
+
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;
@@ -27,8 +28,8 @@ public class LigneCommandeCompanies extends AbstractEntity{
     @Column(name = "quantite")
     private BigDecimal quantite;
 
-    @Column(name = "prixunitaire")
-    private BigDecimal prixUnitaire;
+    @Column(name = "prixTotalLgn")
+    private BigDecimal prixTotalLgn;
 
 
 }

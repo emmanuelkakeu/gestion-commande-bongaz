@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 import gestion.commandeProduit.service.MvtStkService;
 import gestion.commandeProduit.validator.ArticleValidator;
-import gestion.commandeProduit.validator.CommandeCompaniesValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,20 +32,17 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
 
     private final CommandeCompaniesRepository commandeCompaniesRepository;
     private final LigneCommandeCompaniesRepository ligneCommandeCompaniesRepository;
-    private final CompaniesRepository companiesRepository;
     private final ArticleRepository articleRepository;
     private final MvtStkService mvtStkService;
 
 
     @Autowired
     public CommandeCompaniesServiceImpl(CommandeCompaniesRepository commandeCompaniesRepository,
-                                        CompaniesRepository companiesRepository,
                                         ArticleRepository articleRepository,
                                         LigneCommandeCompaniesRepository ligneCommandeCompaniesRepository,
                                         MvtStkService mvtStkService) {
         this.commandeCompaniesRepository = commandeCompaniesRepository;
         this.ligneCommandeCompaniesRepository = ligneCommandeCompaniesRepository;
-        this.companiesRepository = companiesRepository;
         this.articleRepository = articleRepository;
         this.mvtStkService = mvtStkService;
 
@@ -55,23 +51,17 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
     @Override
     public CommandeCompaniesDto save(CommandeCompaniesDto dto) {
 
-        List<String> errors = CommandeCompaniesValidator.validate(dto);
-
-        if (!errors.isEmpty()) {
-            log.error("Commande client n'est pas valide");
-            throw new InvalidEntityException("La commande client n'est pas valide", ErrorCodes.COMMANDE_ENTREPRISE_CLIENTE_NOT_VALID, errors);
-        }
+//        List<String> errors = CommandeCompaniesValidator.validate(dto);
+//
+//        if (!errors.isEmpty()) {
+//            log.error("Commande client n'est pas valide");
+//            throw new InvalidEntityException("La commande client n'est pas valide", ErrorCodes.COMMANDE_ENTREPRISE_CLIENTE_NOT_VALID, errors);
+//        }
 
         if ( dto.isCommandeLivree()) {
             throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
 
-        Optional<Companies> client = companiesRepository.findById(dto.getCompaniesDto().getId());
-        if (client.isEmpty()) {
-            log.warn("Client with ID {} was not found in the DB", dto.getCompaniesDto().getId());
-            throw new EntityNotFoundException("Aucun client avec l'ID" + dto.getCompaniesDto().getId() + " n'a ete trouve dans la BDD",
-                    ErrorCodes.CLIENT_NOT_FOUND);
-        }
 
         List<String> articleErrors = new ArrayList<>();
 
@@ -81,6 +71,15 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
                     Optional<Article> article = articleRepository.findById(ligCmdClt.getArticleDto().getId());
                     if (article.isEmpty()) {
                         articleErrors.add("L'article avec l'ID " + ligCmdClt.getArticleDto().getId() + " n'existe pas");
+                    }else {
+                        Article articleEntity = article.get();
+                        BigDecimal newStock = articleEntity.getStockInit().subtract(ligCmdClt.getQuantite());
+                        if (newStock.compareTo(BigDecimal.ZERO) < 0) {
+                            articleErrors.add("Stock insuffisant pour l'article " + ligCmdClt.getArticleDto().getNameArticle());
+                        } else {
+                            articleEntity.setStockInit(newStock);
+                            articleRepository.save(articleEntity);
+                        }
                     }
                 } else {
                     articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
@@ -135,6 +134,16 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
     }
 
     @Override
+    public List<CommandeCompaniesDto> getCommandesByEtat(EtatCommande etatCommande) {
+
+        return commandeCompaniesRepository.findByEtatCommande(etatCommande)
+                .stream()
+                .map(CommandeCompaniesDto::fromEntities)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
     public List<CommandeCompaniesDto> findAll() {
         return commandeCompaniesRepository.findAll().stream()
                 .map(CommandeCompaniesDto::fromEntities)
@@ -147,11 +156,11 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
             log.error("Commande client ID is NULL");
             return;
         }
-        List<LigneCommandeCompanies> ligneCommandeCompanies = ligneCommandeCompaniesRepository.findAllByCommandeCompaniesId(id);
-        if (!ligneCommandeCompanies.isEmpty()) {
-            throw new InvalidOperationException("Impossible de supprimer une commande client deja utilisee",
-                    ErrorCodes.COMMANDE_CLIENT_ALREADY_IN_USE);
-        }
+//        List<LigneCommandeCompanies> ligneCommandeCompanies = ligneCommandeCompaniesRepository.findAllByCommandeCompaniesId(id);
+//        if (!ligneCommandeCompanies.isEmpty()) {
+//            throw new InvalidOperationException("Impossible de supprimer une commande client deja utilisee",
+//                    ErrorCodes.COMMANDE_CLIENT_ALREADY_IN_USE);
+//        }
         commandeCompaniesRepository.deleteById(id);
     }
 
@@ -216,12 +225,6 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
                     ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
         CommandeCompaniesDto commandeClient = checkEtatCommande(idCommande);
-        Optional<Companies> companiesOptional = companiesRepository.findById(idClient);
-        if (companiesOptional.isEmpty()) {
-            throw new EntityNotFoundException(
-                    "Aucun client n'a ete trouve avec l'ID " + idClient, ErrorCodes.CLIENT_NOT_FOUND);
-        }
-        commandeClient.setCompaniesDto(CompaniesDto.fromEntity(companiesOptional.get()));
 
         return CommandeCompaniesDto.fromEntities(
                 commandeCompaniesRepository.save(CommandeCompaniesDto.toEntities(commandeClient))

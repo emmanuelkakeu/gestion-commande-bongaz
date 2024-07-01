@@ -16,13 +16,13 @@ public class LigneCommandeIndividualClientDto {
 
     private ArticleDto article;
 
-    @JsonIgnore
-    private CommandeIndividualClientDto commandeIndividualClient;
 
     private BigDecimal quantite;
 
-    private BigDecimal prixUnitaire;
+    private BigDecimal prixTotalLgn;
 
+    @JsonIgnore
+    private CommandeIndividualClientDto commandeIndividualClient;
 
 
     public static LigneCommandeIndividualClientDto fromEntity(LigneCommandeIndividualClient ligneCommandeIndividualClient) {
@@ -33,7 +33,7 @@ public class LigneCommandeIndividualClientDto {
                 .id(ligneCommandeIndividualClient.getId())
                 .article(ArticleDto.fromEntity(ligneCommandeIndividualClient.getArticle()))
                 .quantite(ligneCommandeIndividualClient.getQuantite())
-                .prixUnitaire(ligneCommandeIndividualClient.getPrixUnitaire())
+                .prixTotalLgn(ligneCommandeIndividualClient.getPrixTotalLgn())
                 .build();
     }
 
@@ -45,7 +45,7 @@ public class LigneCommandeIndividualClientDto {
         LigneCommandeIndividualClient ligneCommandeClient = new LigneCommandeIndividualClient();
         ligneCommandeClient.setId(dto.getId());
         ligneCommandeClient.setArticle(ArticleDto.toEntity(dto.getArticle()));
-        ligneCommandeClient.setPrixUnitaire(dto.getPrixUnitaire());
+        ligneCommandeClient.setPrixTotalLgn(dto.getPrixTotalLgn());
         ligneCommandeClient.setQuantite(dto.getQuantite());
         return ligneCommandeClient;
     }

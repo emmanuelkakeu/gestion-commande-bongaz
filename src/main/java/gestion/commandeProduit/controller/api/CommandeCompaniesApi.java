@@ -2,7 +2,9 @@ package gestion.commandeProduit.controller.api;
 
 import gestion.commandeProduit.DTO.CommandeCompaniesDto;
 import gestion.commandeProduit.DTO.LigneCommandeCompaniesDto;
+import gestion.commandeProduit.entities.CommandeCompanies;
 import gestion.commandeProduit.entities.enums.EtatCommande;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,50 +12,53 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static gestion.commandeProduit.utils.Constants.APP_ROOT;
+import static gestion.commandeProduit.utils.Constants.*;
 
-//@Api("commandesCompanies")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@Tag(name = "commande Companies Management", description = "Endpoint to manage commande Companies")
 
-@RequestMapping(APP_ROOT)
+
+@Tag(name = "Commande Companies Management", description = "Endpoint to manage commande Companies")
+@Api("Commande Commpanies")
+
 public interface CommandeCompaniesApi {
 
 
-    @PostMapping( "/commandesCompanies/create")
+    @PostMapping(CREATE_COMMANDE_COMPANIES_ENDPOINT)
     ResponseEntity<CommandeCompaniesDto> save(@RequestBody CommandeCompaniesDto dto);
 
-    @PatchMapping( "/commandesCompanies/update/etat/{idCommande}/{etatCommande}")
+    @PatchMapping(COMMANDE_COMPANIES_ENDPOINT + "/update/etat/{idCommande}/{etatCommande}")
     ResponseEntity<CommandeCompaniesDto> updateEtatCommande(@PathVariable("idCommande") Integer idCommande, @PathVariable("etatCommande") EtatCommande etatCommande);
 
-    @PatchMapping( "/commandesCompanies/update/quantite/{idCommande}/{idLigneCommande}/{quantite}")
+    @PatchMapping(COMMANDE_COMPANIES_ENDPOINT+"/update/quantite/{idCommande}/{idLigneCommande}/{quantite}")
     ResponseEntity<CommandeCompaniesDto> updateQuantiteCommande(@PathVariable("idCommande") Integer idCommande,
-                                                             @PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("quantite") BigDecimal quantite);
+                                                             @PathVariable("idLigneCommande") Integer idLigneCommande,
+                                                                @PathVariable("quantite") BigDecimal quantite);
 
-    @PatchMapping( "/commandesCompanies/update/client/{idCommande}/{idClient}")
+    @PatchMapping( COMMANDE_COMPANIES_ENDPOINT+"/update/client/{idCommande}/{idClient}")
     ResponseEntity<CommandeCompaniesDto> updateClient(@PathVariable("idCommande") Integer idCommande, @PathVariable("idClient") Integer idClient);
 
-    @PatchMapping( "/commandesCompanies/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
+    @PatchMapping( COMMANDE_COMPANIES_ENDPOINT+"/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
     ResponseEntity<CommandeCompaniesDto> updateArticle(@PathVariable("idCommande") Integer idCommande,
                                                     @PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("idArticle") Integer idArticle);
 
-    @DeleteMapping( "/commandesCompanies/delete/article/{idCommande}/{idLigneCommande}")
+    @DeleteMapping(COMMANDE_COMPANIES_ENDPOINT + "/delete/article/{idCommande}/{idLigneCommande}")
     ResponseEntity<CommandeCompaniesDto> deleteArticle(@PathVariable("idCommande") Integer idCommande, @PathVariable("idLigneCommande") Integer idLigneCommande);
 
-    @GetMapping( "/commandesCompanies/{idCommandeCompanies}")
+    @GetMapping(FIND_COMMANDE_COMPANIES_BY_ID_ENDPOINT )
     ResponseEntity<CommandeCompaniesDto> findById(@PathVariable Integer idCommandeClient);
 
-    @GetMapping( "/commandesCompanies/filter/{codeCommandeCompanies}")
+    @GetMapping(FIND_COMMANDE_COMPANIES_BY_CODE_ENDPOINT )
     ResponseEntity<CommandeCompaniesDto> findByCode(@PathVariable("codecommandesCompanies") String code);
 
-    @GetMapping( "/commandesCompanies/all")
+    @GetMapping(FIND_COMMANDE_COMPANIES_BY_ETAT_ENDPOINT )
+    ResponseEntity<List<CommandeCompaniesDto>> getCommandesByEtat(@PathVariable("etat") EtatCommande etatCommande);
+
+    @GetMapping(FIND_ALL_COMMANDE_COMPANIES_ENDPOINT )
     ResponseEntity<List<CommandeCompaniesDto>> findAll();
 
-    @GetMapping( "/commandesCompanies/lignesCommande/{idCommande}")
+    @GetMapping( COMMANDE_COMPANIES_ENDPOINT+"/lignesCommande/{idCommande}")
     ResponseEntity<List<LigneCommandeCompaniesDto>> findAllLignesCommandesCompaniesByCommandeCompaniesId(@PathVariable("idCommande") Integer idCommande);
 
-
-    @DeleteMapping( "/commandesCompanies/delete/{idcommandesCompanies}")
-    ResponseEntity<Void> delete(@PathVariable("idcommandesCompanies") Integer id);
+    @DeleteMapping(DELETE_COMMANDE_COMPANIES_ENDPOINT)
+    void delete(@PathVariable("idCommandeCompanies") Integer id);
 
 }
