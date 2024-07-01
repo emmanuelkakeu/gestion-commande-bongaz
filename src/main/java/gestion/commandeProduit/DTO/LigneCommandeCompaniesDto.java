@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import gestion.commandeProduit.entities.Article;
 import gestion.commandeProduit.entities.CommandeCompanies;
 import gestion.commandeProduit.entities.LigneCommandeCompanies;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 public class LigneCommandeCompaniesDto {
 
-    private int id;
+    private Integer id;
 
     private ArticleDto articleDto;
 
@@ -22,7 +23,7 @@ public class LigneCommandeCompaniesDto {
 
     private BigDecimal quantite;
 
-    private BigDecimal prixUnitaire;
+    private BigDecimal prixTotalLgn;
 
 
     public static LigneCommandeCompaniesDto fromEntities(LigneCommandeCompanies ligneCommandeCompanies){
@@ -34,7 +35,7 @@ public class LigneCommandeCompaniesDto {
                  .id(ligneCommandeCompanies.getId())
                  .articleDto(ArticleDto.fromEntity(ligneCommandeCompanies.getArticle()))
                  .quantite(ligneCommandeCompanies.getQuantite())
-                 .prixUnitaire(ligneCommandeCompanies.getPrixUnitaire())
+                 .prixTotalLgn(ligneCommandeCompanies.getPrixTotalLgn())
                  .commandeCompaniesDto(CommandeCompaniesDto.fromEntities(ligneCommandeCompanies.getCommandeCompanies()))
                  .build();
     }
@@ -49,7 +50,7 @@ public class LigneCommandeCompaniesDto {
         ligneCommandeCompanies.setId(dto.getId());
         ligneCommandeCompanies.setArticle(ArticleDto.toEntity(dto.getArticleDto()));
         ligneCommandeCompanies.setQuantite(dto.getQuantite());
-        ligneCommandeCompanies.setPrixUnitaire(dto.getPrixUnitaire());
+        ligneCommandeCompanies.setPrixTotalLgn(dto.getPrixTotalLgn());
         return ligneCommandeCompanies;
     }
 }

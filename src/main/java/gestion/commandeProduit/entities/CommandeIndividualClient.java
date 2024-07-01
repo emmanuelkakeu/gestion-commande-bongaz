@@ -28,11 +28,14 @@ public class CommandeIndividualClient extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private EtatCommande etatCommande;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_individualClient")
-    private IndividualClient individualClient;
+
+    @Column(name = "Id_individualClient")
+    private int IdIndividualClient;
 
     @OneToMany(mappedBy = "commandeIndividualClient")
     private List<LigneCommandeIndividualClient> ligneCommandeIndividualClients;
+
+    @Column(name = "prixTolalCmmd")
+    private String prixTolalCmmd;
 
 }

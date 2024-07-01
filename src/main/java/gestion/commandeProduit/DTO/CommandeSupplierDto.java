@@ -4,9 +4,11 @@ package gestion.commandeProduit.DTO;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import gestion.commandeProduit.entities.CommandeSupplier;
 import gestion.commandeProduit.entities.enums.EtatCommande;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,10 +24,12 @@ public class CommandeSupplierDto {
 
     private EtatCommande etatCommande;
 
-    private SupplierDto supplier;
+    private int idSupplier;
 
+    private List<LigneCommandeSupplierDto> ligneCommandeSupplierDto;
 
-    private List<LigneCommandeSupplierDto> ligneCommandeSupplier;
+    private String prixTolalCmmd;
+
 
     public static CommandeSupplierDto fromEntity(CommandeSupplier commandeSupplier) {
         if (commandeSupplier == null) {
@@ -35,8 +39,9 @@ public class CommandeSupplierDto {
                 .id(commandeSupplier.getId())
                 .code(commandeSupplier.getCode())
                 .dateCommande(commandeSupplier.getDateCommande())
-                .supplier(SupplierDto.fromEntity(commandeSupplier.getSupplier()))
+                .idSupplier(commandeSupplier.getIdSupplier())
                 .etatCommande(commandeSupplier.getEtatCommande())
+                .prixTolalCmmd(commandeSupplier.getPrixTolalCmmd())
                 .build();
     }
 
@@ -48,8 +53,16 @@ public class CommandeSupplierDto {
         commandeSupplier.setId(dto.getId());
         commandeSupplier.setCode(dto.getCode());
         commandeSupplier.setDateCommande(dto.getDateCommande());
-        commandeSupplier.setSupplier(SupplierDto.toEntity(dto.getSupplier()));
+        commandeSupplier.setIdSupplier(dto.getIdSupplier());
         commandeSupplier.setEtatCommande(dto.getEtatCommande());
+        commandeSupplier.setPrixTolalCmmd(dto.getPrixTolalCmmd());
+        commandeSupplier.setLigneCommandeSupplier(
+                dto.getLigneCommandeSupplierDto() != null ?
+                        dto.getLigneCommandeSupplierDto().stream()
+                                .map(LigneCommandeSupplierDto::toEntity)
+                                .collect(Collectors.toList()) : null
+        );
+
         return commandeSupplier;
     }
 

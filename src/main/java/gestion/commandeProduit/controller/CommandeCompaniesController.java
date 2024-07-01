@@ -6,13 +6,16 @@ import java.util.List;
 import gestion.commandeProduit.DTO.CommandeCompaniesDto;
 import gestion.commandeProduit.DTO.LigneCommandeCompaniesDto;
 import gestion.commandeProduit.controller.api.CommandeCompaniesApi;
+import gestion.commandeProduit.entities.CommandeCompanies;
 import gestion.commandeProduit.entities.enums.EtatCommande;
 import gestion.commandeProduit.service.CommandeCompaniesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class CommandeCompaniesController implements CommandeCompaniesApi {
 
     private final CommandeCompaniesService commandeCompaniesService;
@@ -24,6 +27,8 @@ public class CommandeCompaniesController implements CommandeCompaniesApi {
 
     @Override
     public ResponseEntity<CommandeCompaniesDto> save(CommandeCompaniesDto dto) {
+
+        log.info( "dto companies recu::::: {}", dto);
         return ResponseEntity.ok(commandeCompaniesService.save(dto));
     }
 
@@ -53,13 +58,17 @@ public class CommandeCompaniesController implements CommandeCompaniesApi {
     }
 
     @Override
-    public ResponseEntity<CommandeCompaniesDto> findById(Integer id) {
-        return ResponseEntity.ok(commandeCompaniesService.findById(id));
+    public ResponseEntity<CommandeCompaniesDto> findById(Integer idCommandeCompany) {
+        return ResponseEntity.ok(commandeCompaniesService.findById(idCommandeCompany));
     }
 
     @Override
     public ResponseEntity<CommandeCompaniesDto> findByCode(String code) {
         return ResponseEntity.ok(commandeCompaniesService.findByCode(code));
+    }
+    @Override
+    public ResponseEntity<List<CommandeCompaniesDto>>  getCommandesByEtat(EtatCommande etatCommande) {
+        return ResponseEntity.ok(commandeCompaniesService.getCommandesByEtat(etatCommande));
     }
 
     @Override
@@ -72,9 +81,9 @@ public class CommandeCompaniesController implements CommandeCompaniesApi {
         return ResponseEntity.ok(commandeCompaniesService.findAllLignesCommandesCompaniesByCommandeCompaniesId(idCommande));
     }
 
+
     @Override
-    public ResponseEntity<Void> delete(Integer id) {
+    public void delete(Integer id) {
         commandeCompaniesService.delete(id);
-        return ResponseEntity.ok().build();
     }
 }

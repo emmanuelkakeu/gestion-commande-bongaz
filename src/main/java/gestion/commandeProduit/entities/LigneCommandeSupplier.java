@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "lignecommandefournisseur")
+@Table(name = "ligneCommandeSupplier")
 public class LigneCommandeSupplier extends AbstractEntity {
 
     @ManyToOne
@@ -28,10 +28,8 @@ public class LigneCommandeSupplier extends AbstractEntity {
     @Column(name = "quantite")
     private BigDecimal quantite;
 
-    @Column(name = "prixunitaire")
-    private BigDecimal prixUnitaire;
+    @Column(name = "prixTotalLgn")
+    private BigDecimal prixTotalLgn;
 
-    @Column(name = "identreprise")
-    private Integer idEntreprise;
 
 }

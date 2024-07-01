@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface CommandeSupplierRepository extends JpaRepository<CommandeSupplier,Integer> {
-    List<CommandeSupplier> findAllBySupplierId(Integer id);
 
      Optional<CommandeSupplier> findCommandeSupplierByCode(String code);
 }

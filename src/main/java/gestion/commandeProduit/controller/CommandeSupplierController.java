@@ -16,13 +16,16 @@ public class CommandeSupplierController implements CommandeSupplierApi {
 
     private final CommandeSupplierService commandeSupplierService;
 
+
     @Autowired
     public CommandeSupplierController(CommandeSupplierService commandeSupplierService) {
         this.commandeSupplierService = commandeSupplierService;
+
     }
 
     @Override
     public CommandeSupplierDto save(CommandeSupplierDto dto) {
+        System.out.println("Received CommandeSupplierDto:::::::::: " + dto);
         return commandeSupplierService.save(dto);
     }
 

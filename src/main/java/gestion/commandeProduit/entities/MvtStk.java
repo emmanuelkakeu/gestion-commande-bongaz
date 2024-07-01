@@ -37,6 +37,6 @@ public class MvtStk extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private SourceMvtStk sourceMvt;
 
-    @Column(name = "identreprise")
-    private Integer idEntreprise;
+//    @Column(name = "identreprise")
+//    private Integer idEntreprise;
 }

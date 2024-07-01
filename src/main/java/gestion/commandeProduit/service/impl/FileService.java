@@ -25,7 +25,10 @@ public class FileService {
     }
 
     public String saveImage(MultipartFile imageFile) throws IOException {
-        String imageName = this.generateRandomName() + "." + (Objects.requireNonNull(imageFile.getContentType()).split("/"))[1];
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new IOException("Invalid image file.");
+        }
+        String imageName = this.generateRandomName() + "." + Objects.requireNonNull(imageFile.getContentType()).split("/")[1];
         String imageDirectory = "src/main/resources/static/images/";
         Path path = Paths.get(imageDirectory);
         if (!Files.exists(path)) {

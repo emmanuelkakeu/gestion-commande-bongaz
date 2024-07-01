@@ -1,10 +1,9 @@
 package gestion.commandeProduit.entities;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +17,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "article")
 public class Article extends AbstractEntity {
+
+    @Column(name = "nameArticle")
+    private String nameArticle;
 
     @Column(name = "codearticle")
     private String codeArticle;
@@ -34,9 +36,17 @@ public class Article extends AbstractEntity {
     @Column(name = "prixunitairettc")
     private BigDecimal prixUnitaireTtc;
 
-    @Column(name = "imageFileName")
+    @Column(name = "stock")
+    private BigDecimal stock;
+
+    @Column(name = "image_file_name")
     private String imageFileName;
 
+    @Column(name = "supplier_id", nullable = true)
+    private Integer supplierId;
+
+    @Column(name = "gas_retailer_id", nullable = true)
+    private Integer gasRetailerId;
 
     @OneToMany(mappedBy = "article")
     private List<LigneVentes> ligneVentes;
@@ -50,10 +60,9 @@ public class Article extends AbstractEntity {
     @OneToMany(mappedBy = "article")
     private List<LigneCommandeCompanies> ligneCommandeCompanies;
 
-
     @OneToMany(mappedBy = "article")
     private List<MvtStk> mvtStks;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleImage> imageArticle = new ArrayList<>();
 }
-
-

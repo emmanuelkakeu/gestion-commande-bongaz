@@ -29,11 +29,15 @@ public class CommandeCompanies extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private EtatCommande etatCommande;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_companies")
-    private Companies companies;
+    @Column(name = "Id_companies")
+    private int idCompanies;
 
     @OneToMany(mappedBy = "commandeCompanies")
     private List<LigneCommandeCompanies> ligneCommandeCompanies;
+
+    @Column(name = "prixTolalCmmd")
+    private String prixTolalCmmd;
+
+
 
 }

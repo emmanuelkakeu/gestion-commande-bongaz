@@ -1,5 +1,6 @@
 package gestion.commandeProduit.entities;
 
+import gestion.commandeProduit.DTO.ArticleDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,8 +28,8 @@ public class LigneCommandeIndividualClient extends AbstractEntity {
     @Column(name = "quantite")
     private BigDecimal quantite;
 
-    @Column(name = "prixunitaire")
-    private BigDecimal prixUnitaire;
+    @Column(name = "prixTotalLgn")
+    private BigDecimal prixTotalLgn;
 
 
 

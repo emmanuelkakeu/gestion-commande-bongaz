@@ -3,6 +3,7 @@ package gestion.commandeProduit.controller.api;
 import gestion.commandeProduit.DTO.CommandeSupplierDto;
 import gestion.commandeProduit.DTO.LigneCommandeSupplierDto;
 import gestion.commandeProduit.entities.enums.EtatCommande;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +12,9 @@ import java.util.List;
 
 import static gestion.commandeProduit.utils.Constants.*;
 
-//@Api("commandeSupplier")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@Tag(name = "commande supplier Management", description = "Endpoint to manage commande supplier")
 
+
+@Tag(name = "Commande supplier Management", description = "Endpoint to manage commande supplier")
 
 public interface CommandeSupplierApi {
 
@@ -51,6 +51,6 @@ public interface CommandeSupplierApi {
     List<LigneCommandeSupplierDto> findAllLignesCommandesSupplierByCommandeSupplierId(@PathVariable("idCommande") Integer idCommande);
 
     @DeleteMapping(DELETE_COMMANDE_FOURNISSEUR_ENDPOINT)
-    void delete(@PathVariable("idCommandeSupplier") Integer id);
+    void delete(@PathVariable("idCommandeSupplier") Integer idCommandeSupplier);
 
 }

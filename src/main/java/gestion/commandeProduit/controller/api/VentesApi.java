@@ -1,6 +1,7 @@
 package gestion.commandeProduit.controller.api;
 
 import gestion.commandeProduit.DTO.VentesDto;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,27 +9,24 @@ import java.util.List;
 
 import static gestion.commandeProduit.utils.Constants.VENTES_ENDPOINT;
 
-//@Api("ventes")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@Tag(name = "vente Management", description = "Endpoint to manage vente")
 
 
-@RequestMapping(VENTES_ENDPOINT)
+@Tag(name = "Vente Management", description = "Endpoint to manage vente")
 public interface VentesApi {
 
-    @PostMapping( "/create")
+    @PostMapping(VENTES_ENDPOINT + "/create")
     VentesDto save(@RequestBody VentesDto dto);
 
-    @GetMapping( "/{idVente}")
+    @GetMapping(VENTES_ENDPOINT + "/{idVente}")
     VentesDto findById(@PathVariable("idVente") Integer id);
 
-    @GetMapping( "/code/{codeVente}")
+    @GetMapping( VENTES_ENDPOINT +"/code/{codeVente}")
     VentesDto findByCode(@PathVariable("codeVente") String code);
 
-    @GetMapping( "/all")
+    @GetMapping(VENTES_ENDPOINT + "/all")
     List<VentesDto> findAll();
 
-    @DeleteMapping("/delete/{idVente}")
+    @DeleteMapping(VENTES_ENDPOINT +"/delete/{idVente}")
     void delete(@PathVariable("idVente") Integer id);
 
 }

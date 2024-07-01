@@ -11,4 +11,9 @@ import java.util.List;
 @Repository
 public interface LigneCommandeIndividualClientRepository extends JpaRepository<LigneCommandeIndividualClient, Integer> {
    List<LigneCommandeIndividualClient> findAllByArticleId(Integer idArticle);
+
+    List<LigneCommandeIndividualClient> findAllByCommandeIndividualClientId(Integer idCommande);
+
+
+
 }
