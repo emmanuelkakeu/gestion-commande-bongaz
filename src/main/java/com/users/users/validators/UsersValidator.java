@@ -1,14 +1,14 @@
 package com.users.users.validators;
 
+import com.users.users.dto.UtilisateurDto;
+import org.springframework.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.users.users.dto.UsersDto;
-import org.springframework.util.StringUtils;
-
 public class UsersValidator {
 
-    public static List<String> validate(UsersDto usersDto) {
+    public static List<String> validate(UtilisateurDto usersDto) {
         List<String> errors = new ArrayList<>();
 
         if (usersDto == null) {

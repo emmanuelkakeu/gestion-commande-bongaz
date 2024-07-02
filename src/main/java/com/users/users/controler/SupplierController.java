@@ -14,6 +14,8 @@ import com.users.users.services.interfaces.SupplierService;
 import java.io.IOException;
 import java.util.List;
 
+import static com.users.users.utils.Constants.SUPPLIERS_ENDPOINT;
+
 @RestController
 public class SupplierController implements SupplierApi {
 
@@ -29,13 +31,13 @@ public class SupplierController implements SupplierApi {
     }
 
     @Override
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = SUPPLIERS_ENDPOINT + "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public SupplierDto save(@RequestPart("supplierDTO") String supplierJson,
                             @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
-        // Convertir la chaîne JSON en objet SupplierDto en utilisant l'ObjectMapper configuré
         SupplierDto supplierDto = objectMapper.readValue(supplierJson, SupplierDto.class);
-     return supplierService.save(supplierDto, imageFile);
+        return supplierService.save(supplierDto, imageFile);
     }
+
 
     @Override
     public SupplierDto findById(Integer id) {

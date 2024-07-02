@@ -10,6 +10,8 @@ public interface DeliveryManService {
 
     DeliveryPersonDto save(DeliveryPersonDto dto, MultipartFile imageFile) throws IOException;
 
+    List<DeliveryPersonDto> getAllDeliveryPersonsByVille(String ville);
+
     DeliveryPersonDto findById(Integer id);
 
     List<DeliveryPersonDto> findAll();

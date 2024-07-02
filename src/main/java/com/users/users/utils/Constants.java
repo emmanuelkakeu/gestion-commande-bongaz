@@ -2,7 +2,7 @@ package com.users.users.utils;
 
 public interface Constants {
 
-    String APP_ROOT = "gestiondestock/v1";
+    String APP_ROOT = "gestionUtilisateurs/v1";
 
 //    String COMMANDE_FOURNISSEUR_ENDPOINT = APP_ROOT + "/commandesfournisseurs";
 //    String CREATE_COMMANDE_FOURNISSEUR_ENDPOINT = COMMANDE_FOURNISSEUR_ENDPOINT + "/create";
@@ -11,15 +11,17 @@ public interface Constants {
 //    String FIND_ALL_COMMANDE_FOURNISSEUR_ENDPOINT = COMMANDE_FOURNISSEUR_ENDPOINT + "/all";
 //    String DELETE_COMMANDE_FOURNISSEUR_ENDPOINT = COMMANDE_FOURNISSEUR_ENDPOINT + "/delete/{idCommandeFournisseur}";
 
-    String COMPANIES_ENDPOINT = APP_ROOT + "/companies";
+    String COMPANIES_ENDPOINT =  "/companies";
 
-    String SUPPLIERS_ENDPOINT = APP_ROOT + "/suppliers";
+    String SUPPLIERS_ENDPOINT =  "/suppliers";
 
-    String INDIVIDUALCLIENT_ENDPOINT = APP_ROOT + "/individualClient";
+    String INDIVIDUALCLIENT_ENDPOINT =  "/individualClient";
 
-    String DELIVERYPERSON_ENDPOINT = APP_ROOT + "/deliveryPersonne";
+    String DELIVERYPERSON_ENDPOINT = "/deliveryPersonne";
 
-    String GASRETAILER_ENDPOINT = APP_ROOT + "/gasRetailer";
+    String GASRETAILER_ENDPOINT =  "/gasRetailer";
 
-    String AUTHENTICATION_ENDPOINT = APP_ROOT + "/auth";
+    String USERSENDPOINT ="/users";
+
+    String AUTHENTICATION_ENDPOINT =  "/auth";
 }

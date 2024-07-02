@@ -1,13 +1,20 @@
 package com.users.users.models;
 
-import com.users.users.enums.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.users.users.models.enums.TypeRole;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@Data
-@RequiredArgsConstructor
+import java.util.List;
+
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "role")
 public class Role {
 
@@ -16,10 +23,15 @@ public class Role {
     private int id;
 
     @Enumerated(EnumType.STRING)
-    private Roles roles;
+    private TypeRole libelle;
 
-    @ManyToOne
-    @JoinColumn(name = "idUsers")
-    private Users users;
+    @OneToMany(mappedBy = "role")
+    @JsonIgnore
+    private List<Utilisateurs> utilisateurs;
+
+    public Role(TypeRole typeRole) {
+        this.libelle = typeRole;
+    }
+
 
 }

@@ -1,13 +1,10 @@
 package com.users.users.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +12,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 
-public class Companies extends Users{
+public class Companies extends Utilisateurs {
 
     private String openingHours;
 //    @OneToMany(mappedBy = "companies")

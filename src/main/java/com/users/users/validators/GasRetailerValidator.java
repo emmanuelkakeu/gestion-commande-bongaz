@@ -14,7 +14,6 @@ public class GasRetailerValidator {
 
         if (dto == null) {
             errors.add("Veuillez renseigner le nom du vendeur de gaz");
-            errors.add("Veuillez renseigner l'image' du vendeur de gaz");
             errors.add("Veuillez renseigner le numero de telephone du vendeur de gaz");
             errors.addAll(AdresseValidator.validate(null));
             return errors;
@@ -22,9 +21,6 @@ public class GasRetailerValidator {
 
         if (!StringUtils.hasLength(dto.getName())) {
             errors.add("Veuillez renseigner le nom du vendeur de gaz");
-        }
-        if (!StringUtils.hasLength(dto.getImageFileName())) {
-            errors.add("Veuillez renseigner l'image' du vendeur de gaz");
         }
 
         if (!StringUtils.hasLength(dto.getContactDetails())) {

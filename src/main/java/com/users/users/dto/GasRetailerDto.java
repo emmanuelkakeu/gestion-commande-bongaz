@@ -1,7 +1,7 @@
 package com.users.users.dto;
 
-import com.users.users.enums.Status;
-import com.users.users.models.Adresse;
+import com.users.users.models.Role;
+import com.users.users.models.enums.Status;
 import com.users.users.models.GasRetailer;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -39,6 +41,17 @@ public class GasRetailerDto {
 
     private String openingHours;
 
+    private String email;
+
+    private String password;
+
+    private Role role;
+
+    private double latitude;
+
+    private double longitude;
+
+
 
     public static GasRetailerDto fromEntity(GasRetailer gasRetailer){
 
@@ -55,6 +68,11 @@ public class GasRetailerDto {
                 .status(gasRetailer.getStatus())
                 .openingHours(gasRetailer.getOpeningHours())
                 .imageFileName(gasRetailer.getImageFileName())
+                .email(gasRetailer.getEmail())
+                .latitude(gasRetailer.getLatitude())
+                .longitude(gasRetailer.getLongitude())
+                .password(gasRetailer.getPassword())
+                .role(gasRetailer.getRole())
                 .build();
     }
 
@@ -71,6 +89,13 @@ public class GasRetailerDto {
         gasRetailer.setContactDetails(dto.getContactDetails());
         gasRetailer.setOpeningHours(dto.getOpeningHours());
         gasRetailer.setImageFileName(dto.getImageFileName());
+        gasRetailer.setStatus(dto.getStatus());
+        gasRetailer.setEmail(dto.getEmail());
+        gasRetailer.setPassword(dto.getPassword());
+        gasRetailer.setLatitude(dto.getLatitude());
+        gasRetailer.setLongitude(dto.getLongitude());
+        gasRetailer.setRole(dto.getRole());
+
 
         return gasRetailer;
     }

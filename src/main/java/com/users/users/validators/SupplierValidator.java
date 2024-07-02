@@ -32,7 +32,7 @@ public class SupplierValidator {
         if (!StringUtils.hasLength(dto.getContactDetails())) {
             errors.add("Veuillez renseigner le numero de telephone du fournisseur");
         }
-        errors.addAll(AdresseValidator.validate(dto.getAdresse()));
+        errors.addAll(AdresseValidator.validate(dto.getAdresseDto()));
         return errors;
     }
 

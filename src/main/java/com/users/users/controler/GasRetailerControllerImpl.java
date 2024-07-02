@@ -5,6 +5,7 @@ import com.users.users.controler.api.CompaniesApi;
 import com.users.users.controler.api.GasRetailerApi;
 import com.users.users.dto.CompaniesDto;
 import com.users.users.dto.GasRetailerDto;
+import com.users.users.models.GasRetailer;
 import com.users.users.services.interfaces.CompaniesService;
 import com.users.users.services.interfaces.GasRetailerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class GasRetailerControllerImpl implements GasRetailerApi {
     }
 
     @Override
-    public GasRetailerDto save(@RequestPart("GasRetailerDto") String gasRetailerJson, @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
+    public GasRetailerDto save(@RequestPart("gasRetailerDTO") String gasRetailerJson, @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
 
 
         GasRetailerDto gasRetailerDto = objectMapper.readValue(gasRetailerJson, GasRetailerDto.class);
@@ -50,5 +51,10 @@ public class GasRetailerControllerImpl implements GasRetailerApi {
     @Override
     public void delete(Integer id) {
         gasRetailerService.delete(id);
+    }
+
+    @Override
+    public List<GasRetailerDto> getNearbyRetailers(double lat, double lng) {
+            return gasRetailerService.getNearbyRetailers(lat, lng);
     }
 }

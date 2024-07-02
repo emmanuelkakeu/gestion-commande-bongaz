@@ -19,4 +19,5 @@ public interface GasRetailerService {
 
     void delete(Integer id);
 
+    List<GasRetailerDto> getNearbyRetailers(double lat, double lng);
 }

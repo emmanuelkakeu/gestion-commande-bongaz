@@ -2,12 +2,8 @@ package com.users.users.controler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.users.users.controler.api.DeliveryPersonApi;
-import com.users.users.controler.api.IndividualClientApi;
 import com.users.users.dto.DeliveryPersonDto;
-import com.users.users.dto.IndividualClientDto;
-import com.users.users.models.DeliveryPerson;
 import com.users.users.services.interfaces.DeliveryManService;
-import com.users.users.services.interfaces.IndividualClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +31,11 @@ public class DeliveryPersonControllerImpl implements DeliveryPersonApi {
 
         DeliveryPersonDto deliveryPersonDto = objectMapper.readValue(deliveryPersonJson, DeliveryPersonDto.class);
         return deliveryManService.save(deliveryPersonDto, imageFile);
+    }
+
+    @Override
+    public List<DeliveryPersonDto> getAllDeliveryPersonsByVille(String ville) {
+        return deliveryManService.getAllDeliveryPersonsByVille(ville);
     }
 
     @Override
