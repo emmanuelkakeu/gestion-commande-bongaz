@@ -2,7 +2,7 @@ package com.users.users.dto;
 
 import com.users.users.models.Role;
 import com.users.users.models.enums.Status;
-import com.users.users.models.Supplier;
+import com.users.users.models.Administrateur;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,7 +47,7 @@ public class SupplierDto {
 
     private double longitude;
 
-    public static SupplierDto fromEntity(Supplier supplier) {
+    public static SupplierDto fromEntity(Administrateur supplier) {
         if (supplier == null) {
             return null;
         }
@@ -70,11 +70,11 @@ public class SupplierDto {
                 .build();
     }
 
-    public static Supplier toEntity(SupplierDto dto) {
+    public static Administrateur toEntity(SupplierDto dto) {
         if (dto == null) {
             return null;
         }
-        Supplier supplier = new Supplier();
+        Administrateur supplier = new Administrateur();
         supplier.setName(dto.getName());
         supplier.setFirstName(dto.getFirstName());
         supplier.setLastName(dto.getLastName());

@@ -1,19 +1,16 @@
 package com.users.users.services;
 
 
-import com.users.users.dto.RoleDto;
 import com.users.users.dto.SupplierDto;
 import com.users.users.exception.EntityNotFoundException;
 import com.users.users.exception.ErrorCodes;
 import com.users.users.exception.InvalidEntityException;
 import com.users.users.models.Role;
-import com.users.users.models.Supplier;
 import com.users.users.models.Utilisateurs;
 import com.users.users.models.enums.TypeRole;
 import com.users.users.repository.RoleRepository;
 import com.users.users.repository.SupplierRepository;
 import com.users.users.repository.UsersRepository;
-import com.users.users.services.auth.JwtFilter;
 import com.users.users.services.interfaces.SupplierService;
 import com.users.users.validators.SupplierValidator;
 import lombok.extern.slf4j.Slf4j;

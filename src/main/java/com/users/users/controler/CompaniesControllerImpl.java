@@ -2,11 +2,8 @@ package com.users.users.controler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.users.users.controler.api.CompaniesApi;
-import com.users.users.controler.api.IndividualClientApi;
 import com.users.users.dto.CompaniesDto;
-import com.users.users.dto.IndividualClientDto;
 import com.users.users.services.interfaces.CompaniesService;
-import com.users.users.services.interfaces.IndividualClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

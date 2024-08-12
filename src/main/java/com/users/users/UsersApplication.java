@@ -21,7 +21,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @EnableScheduling
 @EnableJpaAuditing
 @AllArgsConstructor
-public class UsersApplication  {
+public class UsersApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(UsersApplication.class, args);
@@ -35,35 +35,5 @@ public class UsersApplication  {
 		return new StandardServletMultipartResolver();
 	}
 
-//	@Override
-//	public void run(String... args) throws Exception {
-//
-//		Utilisateurs admin = Utilisateurs.builder()
-//				.status(Status.ACTIVER)
-//				.email("emmanuelkakeu2@gmail.com")
-//				.password(passwordEncoder.encode("admin"))
-//				.role(
-//						Role.builder()
-//								.libelle(TypeRole.ADMIN)
-//								.build()
-//				)
-//		.build();
-//
-//		admin = this.usersRepository.findByEmail("emmanuelkakeu2@gmail.com").orElse(admin);
-//		this.usersRepository.save(admin);
-//
-//		Utilisateurs supplier = Utilisateurs.builder()
-//				.status(Status.ACTIVER)
-//				.email("supplier2@gmail.com")
-//				.password(passwordEncoder.encode("supplier"))
-//				.role(
-//						Role.builder()
-//								.libelle(TypeRole.SUPPLIER)
-//								.build()
-//				)
-//				.build();
-//
-//		supplier = this.usersRepository.findByEmail("supplier2@gmail.com").orElse(supplier);
-//		this.usersRepository.save(supplier);
-//	}
+
 }

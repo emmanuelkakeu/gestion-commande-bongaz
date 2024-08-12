@@ -104,6 +104,7 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
                         newRole.setLibelle(TypeRole.COMPANIESCLIENT);
                         return roleRepository.save(newRole);
                     });
+
             default -> throw new InvalidEntityException("Type d'utilisateur non reconnu", ErrorCodes.UTILISATEUR_NOT_VALID, Collections.singletonList("Type d'utilisateur non reconnu"));
         };
 
