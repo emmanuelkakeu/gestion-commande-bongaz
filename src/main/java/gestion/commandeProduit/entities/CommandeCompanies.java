@@ -35,9 +35,10 @@ public class CommandeCompanies extends AbstractEntity{
     @OneToMany(mappedBy = "commandeCompanies")
     private List<LigneCommandeCompanies> ligneCommandeCompanies;
 
-    @Column(name = "prixTolalCmmd")
-    private String prixTolalCmmd;
+    @Column(name = "prixTotalCmmd")
+    private String prixTotalCmmd;
 
-
+    @OneToOne(mappedBy = "commandeCompanies")
+    private CommandeCompaniesFinal commandeCompaniesFinal;
 
 }

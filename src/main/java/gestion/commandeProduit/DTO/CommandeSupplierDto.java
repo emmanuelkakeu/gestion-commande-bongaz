@@ -28,7 +28,7 @@ public class CommandeSupplierDto {
 
     private List<LigneCommandeSupplierDto> ligneCommandeSupplierDto;
 
-    private String prixTolalCmmd;
+    private String prixTotalCmmd;
 
 
     public static CommandeSupplierDto fromEntity(CommandeSupplier commandeSupplier) {
@@ -41,7 +41,13 @@ public class CommandeSupplierDto {
                 .dateCommande(commandeSupplier.getDateCommande())
                 .idSupplier(commandeSupplier.getIdSupplier())
                 .etatCommande(commandeSupplier.getEtatCommande())
-                .prixTolalCmmd(commandeSupplier.getPrixTolalCmmd())
+                .prixTotalCmmd(commandeSupplier.getPrixTotalCmmd())
+                .ligneCommandeSupplierDto(
+                        commandeSupplier.getLigneCommandeSupplier() != null ?
+                                commandeSupplier.getLigneCommandeSupplier().stream()
+                                        .map(LigneCommandeSupplierDto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
                 .build();
     }
 
@@ -55,7 +61,7 @@ public class CommandeSupplierDto {
         commandeSupplier.setDateCommande(dto.getDateCommande());
         commandeSupplier.setIdSupplier(dto.getIdSupplier());
         commandeSupplier.setEtatCommande(dto.getEtatCommande());
-        commandeSupplier.setPrixTolalCmmd(dto.getPrixTolalCmmd());
+        commandeSupplier.setPrixTotalCmmd(dto.getPrixTotalCmmd());
         commandeSupplier.setLigneCommandeSupplier(
                 dto.getLigneCommandeSupplierDto() != null ?
                         dto.getLigneCommandeSupplierDto().stream()

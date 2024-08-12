@@ -2,16 +2,18 @@ package gestion.commandeProduit.service.impl;
 
 import gestion.commandeProduit.DTO.ArticleDto;
 import gestion.commandeProduit.DTO.LigneVenteDto;
-import gestion.commandeProduit.entities.*;
+import gestion.commandeProduit.entities.Article;
+import gestion.commandeProduit.entities.ArticleImage;
 import gestion.commandeProduit.exception.EntityNotFoundException;
 import gestion.commandeProduit.exception.ErrorCodes;
 import gestion.commandeProduit.exception.InvalidEntityException;
-import gestion.commandeProduit.exception.InvalidOperationException;
-import gestion.commandeProduit.repository.*;
+import gestion.commandeProduit.repository.ArticleRepository;
+import gestion.commandeProduit.repository.LigneVenteRepository;
 import gestion.commandeProduit.service.ArticleService;
 import gestion.commandeProduit.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -178,4 +180,15 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteById(id);
     }
 
+    @Override
+    public List<ArticleDto> searchArticles(String query, int page, int size) {
+        return articleRepository.searchArticles(query, PageRequest.of(page, size)).stream()
+                .map(ArticleDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public long countArticles(String query) {
+        return articleRepository.countArticles(query);
+    }
 }

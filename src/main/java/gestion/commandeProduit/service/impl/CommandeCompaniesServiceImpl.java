@@ -35,7 +35,6 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
     private final ArticleRepository articleRepository;
     private final MvtStkService mvtStkService;
 
-
     @Autowired
     public CommandeCompaniesServiceImpl(CommandeCompaniesRepository commandeCompaniesRepository,
                                         ArticleRepository articleRepository,
@@ -45,16 +44,11 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
         this.ligneCommandeCompaniesRepository = ligneCommandeCompaniesRepository;
         this.articleRepository = articleRepository;
         this.mvtStkService = mvtStkService;
-
     }
 
     @Override
     public CommandeCompaniesDto save(CommandeCompaniesDto dto) {
         log.info("Starting to save the order with details: {}", dto);
-
-        if (dto.isCommandeLivree()) {
-            throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
-        }
 
         List<String> articleErrors = new ArrayList<>();
 
@@ -69,7 +63,7 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
                         Article articleEntity = article.get();
                         BigDecimal newStock = articleEntity.getStock().subtract(ligCmdClt.getQuantite());
                         if (newStock.compareTo(BigDecimal.ZERO) < 0) {
-                            articleErrors.add("Stock insuffisant pour l'article " + ligCmdClt.getArticleDto().getNameArticle());
+                            articleErrors.add("Stock insuffisant pour l'article ::::: " + ligCmdClt.getArticleDto().getNameArticle());
                         } else {
                             articleEntity.setStock(newStock);
                             articleRepository.save(articleEntity);
@@ -93,7 +87,6 @@ public class CommandeCompaniesServiceImpl implements CommandeCompaniesService {
             List<LigneCommandeCompanies> ligneCommandeCompanies = new ArrayList<>();
             for (LigneCommandeCompaniesDto ligCmdCltDto : dto.getLigneCommandeCompaniesDto()) {
                 LigneCommandeCompanies ligneCommandeCompaniesEntity = LigneCommandeCompaniesDto.toEntities(ligCmdCltDto);
-                // Assurez-vous que l'ID est défini à 0 pour les nouvelles entités
                 ligneCommandeCompaniesEntity.setCommandeCompanies(savedCmdClt);
                 LigneCommandeCompanies savedLigneCmd = ligneCommandeCompaniesRepository.save(ligneCommandeCompaniesEntity);
                 ligneCommandeCompanies.add(savedLigneCmd);

@@ -2,7 +2,6 @@ package gestion.commandeProduit.controller.api;
 
 import gestion.commandeProduit.DTO.CommandeCompaniesDto;
 import gestion.commandeProduit.DTO.LigneCommandeCompaniesDto;
-import gestion.commandeProduit.entities.CommandeCompanies;
 import gestion.commandeProduit.entities.enums.EtatCommande;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

@@ -51,10 +51,6 @@ public class CommandeGasRetailerServiceImpl implements CommandeGasRetailerServic
     public CommandeGasRetailerDto save(CommandeGasRetailerDto dto) {
         log.info("Starting to save the order with details: {}", dto);
 
-        if (dto.isCommandeLivree()) {
-            throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_FOURNISSEUR_NON_MODIFIABLE);
-        }
-
         List<String> articleErrors = new ArrayList<>();
 
         if (dto.getLigneCommandeGasRetailersDto() != null) {

@@ -27,4 +27,8 @@ public interface ArticleService {
 
     void delete(Integer id);
 
+    List<ArticleDto> searchArticles(String query, int page, int size);
+
+    long countArticles(String query);
+
 }

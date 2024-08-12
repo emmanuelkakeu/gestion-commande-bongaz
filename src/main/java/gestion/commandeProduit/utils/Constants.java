@@ -53,5 +53,9 @@ public interface Constants {
 
     String AUTHENTICATION_ENDPOINT = APP_ROOT + "/auth";
 
+    String COMMANDE_COMPANIES_FINAL_ENDPOIND=   "commandeCompaniesFinal";
+
+    String COMMANDE_INDIVIDUALCLIENT_FINAL_ENDPOIND=   "commandeindividualclientfinal";
+
 
 }

@@ -14,18 +14,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class Adresse implements Serializable {
-
-    @Column(name = "adresse1")
-    private String adresse1;
-
-    @Column(name = "adresse2")
-    private String adresse2;
+public class AdresseLivraison implements Serializable {
 
     @Column(name = "ville")
     private String ville;
 
-    @Column(name = "pays")
-    private String pays;
+    @Column(name = "quartier")
+    private String quartier;
+
+    @Column(name = "rue")
+    private String rue;
 
 }

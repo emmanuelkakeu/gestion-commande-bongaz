@@ -28,7 +28,7 @@ public class CommandeGasRetailerDto {
 
     private List<LigneCommandeGasRetailerDto> ligneCommandeGasRetailersDto;
 
-    private String prixTolalCmmd;
+    private String prixTotalCmmd;
 
     public static CommandeGasRetailerDto fromEntity(CommandeGasRetailer commandeGasRetailer) {
         if (commandeGasRetailer == null) {
@@ -40,7 +40,13 @@ public class CommandeGasRetailerDto {
                 .dateCommande(commandeGasRetailer.getDateCommande())
                 .idGasRetailer(commandeGasRetailer.getIdGasRetailer())
                 .etatCommande(commandeGasRetailer.getEtatCommande())
-                .prixTolalCmmd(commandeGasRetailer.getPrixTolalCmmd())
+                .prixTotalCmmd(commandeGasRetailer.getPrixTotalCmmd())
+                .ligneCommandeGasRetailersDto(
+                        commandeGasRetailer.getLigneCommandeGasRetailer() != null ?
+                                commandeGasRetailer.getLigneCommandeGasRetailer().stream()
+                                        .map(LigneCommandeGasRetailerDto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
                 .build();
     }
 
@@ -54,7 +60,7 @@ public class CommandeGasRetailerDto {
         commandeGasRetailer.setDateCommande(dto.getDateCommande());
         commandeGasRetailer.setIdGasRetailer(dto.getIdGasRetailer());
         commandeGasRetailer.setEtatCommande(dto.getEtatCommande());
-        commandeGasRetailer.setPrixTolalCmmd(dto.getPrixTolalCmmd());
+        commandeGasRetailer.setPrixTotalCmmd(dto.getPrixTotalCmmd());
         commandeGasRetailer.setLigneCommandeGasRetailer(
                 dto.getLigneCommandeGasRetailersDto() != null ?
                         dto.getLigneCommandeGasRetailersDto().stream()

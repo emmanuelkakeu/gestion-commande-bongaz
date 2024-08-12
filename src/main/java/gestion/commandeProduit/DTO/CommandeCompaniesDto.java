@@ -3,15 +3,12 @@ package gestion.commandeProduit.DTO;
 import gestion.commandeProduit.entities.CommandeCompanies;
 import gestion.commandeProduit.entities.LigneCommandeCompanies;
 import gestion.commandeProduit.entities.enums.EtatCommande;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
-
-
 
 @Data
 @Builder
@@ -22,7 +19,7 @@ public class CommandeCompaniesDto {
     private EtatCommande etatCommande;
     private int idCompaniesDto;
     private List<LigneCommandeCompaniesDto> ligneCommandeCompaniesDto;
-    private String prixTolalCmmd;
+    private String prixTotalCmmd;  // Corrected field name
 
     public static CommandeCompaniesDto fromEntities(CommandeCompanies commandeCompanies) {
         if (commandeCompanies == null) {
@@ -34,7 +31,7 @@ public class CommandeCompaniesDto {
                 .dateCommande(commandeCompanies.getDateCommande())
                 .etatCommande(commandeCompanies.getEtatCommande())
                 .idCompaniesDto(commandeCompanies.getIdCompanies())
-                .prixTolalCmmd(commandeCompanies.getPrixTolalCmmd())
+                .prixTotalCmmd(commandeCompanies.getPrixTotalCmmd())  // Corrected field name
                 .ligneCommandeCompaniesDto(
                         commandeCompanies.getLigneCommandeCompanies() != null ?
                                 commandeCompanies.getLigneCommandeCompanies().stream()
@@ -54,7 +51,7 @@ public class CommandeCompaniesDto {
         commandeCompanies.setDateCommande(dto.getDateCommande());
         commandeCompanies.setEtatCommande(dto.getEtatCommande());
         commandeCompanies.setIdCompanies(dto.getIdCompaniesDto());
-        commandeCompanies.setPrixTolalCmmd(dto.getPrixTolalCmmd());
+        commandeCompanies.setPrixTotalCmmd(dto.getPrixTotalCmmd());  // Corrected field name
         commandeCompanies.setLigneCommandeCompanies(
                 dto.getLigneCommandeCompaniesDto() != null ?
                         dto.getLigneCommandeCompaniesDto().stream()

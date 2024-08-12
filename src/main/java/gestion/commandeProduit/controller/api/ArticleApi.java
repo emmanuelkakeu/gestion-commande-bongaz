@@ -6,74 +6,70 @@ import gestion.commandeProduit.DTO.LigneCommandeIndividualClientDto;
 import gestion.commandeProduit.DTO.LigneCommandeSupplierDto;
 import gestion.commandeProduit.DTO.LigneVenteDto;
 
+import gestion.commandeProduit.entities.ArticleResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static gestion.commandeProduit.utils.Constants.*;
 
 
-
-@Tag(name = "Article Management", description = "Endpoint to manage article")
-
+@Tag(name = "Article Management", description = "Endpoint to manage articles")
 public interface ArticleApi {
 
     @PostMapping(value = ENDPOINT_ARTICLE + "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ArticleDto save(@RequestPart("articleDto") String articleJson,
-                    @RequestPart("imageFile") MultipartFile imageFile,
-                    @RequestPart("imageFiles") MultipartFile[] imageFiles) throws IOException;
+    ResponseEntity<ArticleDto> save(@RequestPart("articleDto") String articleJson,
+                                    @RequestPart("imageFile") MultipartFile imageFile,
+                                    @RequestPart("imageFiles") MultipartFile[] imageFiles) throws IOException;
 
+    @GetMapping(value = ENDPOINT_ARTICLE + "/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ArticleDto> findById(@PathVariable("idArticle") Integer id);
 
-    @GetMapping(value =ENDPOINT_ARTICLE + "/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ArticleDto findById(@PathVariable("idArticle") Integer id);
+    @GetMapping(value = ENDPOINT_ARTICLE + "/gasRetailerId/{gasRetailerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<ArticleDto>> findByGasRetailerId(@PathVariable("gasRetailerId") Integer gasRetailerId);
 
-    @GetMapping(value =ENDPOINT_ARTICLE + "/gasRetailerId/{gasRetailerId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<ArticleDto> findByGasRetailerId(@PathVariable("gasRetailerId") Integer gasRetailerId);
-
-    @GetMapping(value =ENDPOINT_ARTICLE + "/supplierId/{supplierId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<ArticleDto> findBySupplierId(@PathVariable("supplierId") Integer supplierId);
-
+    @GetMapping(value = ENDPOINT_ARTICLE + "/supplierId/{supplierId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<ArticleDto>> findBySupplierId(@PathVariable("supplierId") Integer supplierId);
 
     @GetMapping(value = ENDPOINT_ARTICLE + "/filter/{codeArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ApiOperation(value = "Rechercher un article par CODE", notes = "Cette methode permet de chercher un article par son CODE", response =
-//            ArticleDto.class)
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "L'article a ete trouve dans la BDD"),
-//            @ApiResponse(code = 404, message = "Aucun article n'existe dans la BDD avec le CODE fourni")
-//    })
-    ArticleDto findByCodeArticle(@PathVariable("codeArticle") String codeArticle);
-
+    ResponseEntity<ArticleDto> findByCodeArticle(@PathVariable("codeArticle") String codeArticle);
 
     @GetMapping(value = ENDPOINT_ARTICLE + "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ApiOperation(value = "Renvoi la liste des articles", notes = "Cette methode permet de chercher et renvoyer la liste des articles qui existent "
-//            + "dans la BDD", responseContainer = "List<ArticleDto>")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "La liste des article / Une liste vide")
-//    })
-    List<ArticleDto> findAll();
-
+    ResponseEntity<List<ArticleDto>> findAll();
 
     @GetMapping(value = ENDPOINT_ARTICLE + "/historique/vente/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<LigneVenteDto> findHistoriqueVentes(@PathVariable("idArticle") Integer idArticle);
-
-
-//    @GetMapping(value =  "/articles/historique/commandeclient/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    List<LigneCommandeIndividualClientDto> findHistoriaueCommandeIndividualClient(@PathVariable("idArticle") Integer idArticle);
-
+    ResponseEntity<List<LigneVenteDto>> findHistoriqueVentes(@PathVariable("idArticle") Integer idArticle);
 
     @GetMapping(value = ENDPOINT_ARTICLE + "/historique/commandefournisseur/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<LigneCommandeSupplierDto> findHistoriqueCommandeSupplier(@PathVariable("idArticle") Integer idArticle);
-
+    ResponseEntity<List<LigneCommandeSupplierDto>> findHistoriqueCommandeSupplier(@PathVariable("idArticle") Integer idArticle);
 
     @DeleteMapping(value = ENDPOINT_ARTICLE + "/delete/{idArticle}")
-//    @ApiOperation(value = "Supprimer un article", notes = "Cette methode permet de supprimer un article par ID")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "L'article a ete supprime")
-//    })
-    void delete(@PathVariable("idArticle") Integer id);
+    ResponseEntity<Void> delete(@PathVariable("idArticle") Integer id);
 
+    @Operation(summary = "Search for articles", description = "Search articles based on query, page number, and page size.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the articles",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ArticleResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid input",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Articles not found",
+                    content = @Content) })
+    @GetMapping(value = ENDPOINT_ARTICLE + "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Map<String, Object>> searchArticles(
+            @Parameter(description = "Search query") @RequestParam String query,
+            @Parameter(description = "Page number") @RequestParam int page,
+            @Parameter(description = "Page size") @RequestParam int size);
 }

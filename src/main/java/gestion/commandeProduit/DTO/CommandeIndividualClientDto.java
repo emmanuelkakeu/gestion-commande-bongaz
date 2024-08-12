@@ -26,7 +26,7 @@ public class CommandeIndividualClientDto {
 
     private List<LigneCommandeIndividualClientDto> ligneCommandeIndividualClientDto;
 
-    private String prixTolalCmmd;
+    private String prixTotalCmmd;
 
 
     public static CommandeIndividualClientDto fromEntity(CommandeIndividualClient commandeIndividualClient) {
@@ -39,13 +39,13 @@ public class CommandeIndividualClientDto {
                 .dateCommande(commandeIndividualClient.getDateCommande())
                 .etatCommande(commandeIndividualClient.getEtatCommande())
                 .idIndividualClient(commandeIndividualClient.getIdIndividualClient())
-                .prixTolalCmmd(commandeIndividualClient.getPrixTolalCmmd())
-//                .ligneCommandeIndividualClientDto(
-//                        commandeIndividualClient.getLigneCommandeIndividualClients() != null ?
-//                                commandeIndividualClient.getLigneCommandeIndividualClients().stream()
-//                                        .map(LigneCommandeIndividualClientDto::fromEntity)
-//                                        .collect(Collectors.toList()) : null
-//                )
+                .prixTotalCmmd(commandeIndividualClient.getPrixTotalCmmd())
+                .ligneCommandeIndividualClientDto(
+                        commandeIndividualClient.getLigneCommandeIndividualClients() != null ?
+                                commandeIndividualClient.getLigneCommandeIndividualClients().stream()
+                                        .map(LigneCommandeIndividualClientDto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
                 .build();
     }
 
@@ -59,7 +59,7 @@ public class CommandeIndividualClientDto {
         commandeClient.setIdIndividualClient(dto.getIdIndividualClient());
         commandeClient.setDateCommande(dto.getDateCommande());
         commandeClient.setEtatCommande(dto.getEtatCommande());
-        commandeClient.setPrixTolalCmmd(dto.getPrixTolalCmmd());
+        commandeClient.setPrixTotalCmmd(dto.getPrixTotalCmmd());
         commandeClient.setLigneCommandeIndividualClients(
                 dto.getLigneCommandeIndividualClientDto() != null ?
                         dto.getLigneCommandeIndividualClientDto().stream()
